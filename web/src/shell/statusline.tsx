@@ -9,9 +9,10 @@ import "./statusline.scss";
 export function describeStatus({ heading, diagnostics = [] }: Status): string {
   const lead =
     heading === undefined ? [] : [describeHeading(heading.file, heading.count)];
-  const listed = diagnostics.map(({ diagnostic }) =>
-    describeDiagnostic(diagnostic),
-  );
+  const listed = diagnostics.map(({ diagnostic, file }) => {
+    const text = describeDiagnostic(diagnostic);
+    return file === undefined ? text : t`${file}: ${text}`;
+  });
   return [...lead, ...listed].join(". ");
 }
 
